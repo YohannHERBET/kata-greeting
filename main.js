@@ -6,34 +6,34 @@ class App {
 
     try {
       if (fs.existsSync(fileName)) {
-        const b = fs.readFileSync(fileName);
-        let content = b.toString().split("\n");
+        const readedFile = fs.readFileSync(fileName);
+        let fileContent = readedFile.toString().split("\n");
 
         console.log("Reading file...");
-        let fl = true;
-        for (let l of content) {
+        let isHeader = true;
+        for (let fileInformations of fileContent) {
           try {
-            if (fl) {
-              fl = false;
+            if (isHeader) {
+              isHeader = false;
             } else {
-              let t = l.split(",");
-              for (let i = 0; i < t.length; i++) {
-                t[i] = t[i].trim();
+              let informations = fileInformations.split(",");
+              for (let informationCount = 0; informationCount < informations.length; informationCount++) {
+                informations[informationCount] = informations[informationCount].trim();
               }
 
-              if (t.length == 4) {
-                const d = t[2].split("/");
-                if (d.length == 3) {
-                  let n = new Date();
-                  if (n.getDate() == Number.parseInt(d[0]) && n.getMonth() == Number.parseInt(d[1]) - 1) {
+              if (informations.length == 4) {
+                const extractDateFromInformations = informations[2].split("/");
+                if (extractDateFromInformations.length == 3) {
+                  let actualDate = new Date();
+                  if (actualDate.getDate() == Number.parseInt(extractDateFromInformations[0]) && actualDate.getMonth() == Number.parseInt(extractDateFromInformations[1]) - 1) {
                     App.sendEmail(
-                      t[3],
+                      informations[3],
                       "Joyeux Anniversaire !",
-                      "Bonjour " + t[0] + ",\nJoyeux Anniversaire !\nA bientôt,"
+                      "Bonjour " + informations[0] + ",\nJoyeux Anniversaire !\nA bientôt,"
                     );
                   }
                 } else {
-                  throw new Error("Cannot read birthdate for " + t[0] + " " + t[1]);
+                  throw new Error("Cannot read birthdate for " + informations[0] + " " + informations[1]);
                 }
               } else {
                 throw new Error("Invalid file format");
