@@ -1,7 +1,8 @@
-const App = require('./birthdayGreeting.js');
+const Greeting = require('./birthdayGreeting.js');
 
 function init () {
-  App.birthDayGreeting();
+  const greeting = new Greeting();
+  greeting.birthDayGreeting();
 }
 
 init();
