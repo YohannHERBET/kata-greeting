@@ -2,12 +2,14 @@
 const fileReader = require("./fileGestion/fileReader.js")
 
 class Greeting {
-
+  constructor(employeesFile) {
+    this.employeesFile = employeesFile
+  }
+  
   birthDayGreeting() {
-    let fileName = "./employees.txt";
-
+    
     try {
-       let fileContent = fileReader.readFile(fileName);
+       let fileContent = fileReader.readFile(this.employeesFile);
 
         let isHeader = true;
         for (let fileInformations of fileContent) {
@@ -16,12 +18,15 @@ class Greeting {
               isHeader = false;
             } else {
                 let informations = fileInformations.split(",");
+
                 if (this.isValidInformations(this.sanitizeFileInformations(informations))) {
                   const extractDateFromInformations = informations[2].split("/");
+
                   if (this.isValidDate(extractDateFromInformations)) {
                     const actualDate = new Date();
+
                     if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
-                      this.greetWhenIsBirthDay(informations)
+                      return this.greetWhenIsBirthDay(informations)
                     }                 
                   }
                 }
@@ -38,18 +43,15 @@ class Greeting {
   } 
 
   greetWhenIsBirthDay(informations) {
-     this.sendEmail(
+     return this.sendEmail(
         informations[3],
         "Joyeux Anniversaire !",
-        "Bonjour " + informations[0] + ",\nJoyeux Anniversaire !\nA bientôt,"
+        "Bonjour " + informations[0] + ",Joyeux Anniversaire !A bientôt,"
     );
   }
 
   sendEmail(to, title, body) {
-    console.log("Sending email to : " + to);
-    console.log("Title: " + title);
-    console.log("Body: Body\n" + body);
-    console.log("-------------------------");
+    return "Sending email to : " + to + "Title: " + title + "Body: Body" + body
   }
   
   sanitizeFileInformations (informations) {

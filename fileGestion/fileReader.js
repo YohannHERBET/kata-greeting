@@ -3,7 +3,6 @@ const fs = require("fs");
 class FileReader {
 
     static readFile(fileName) {
-
       if (fs.existsSync(fileName)) {
         const readedFile = fs.readFileSync(fileName);
         let fileContent = readedFile.toString().split("\n");
