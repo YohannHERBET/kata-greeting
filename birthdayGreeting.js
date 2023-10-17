@@ -1,4 +1,5 @@
-const fs = require("fs");
+
+const fileReader = require("./fileGestion/fileReader.js")
 
 class Greeting {
 
@@ -6,25 +7,24 @@ class Greeting {
     let fileName = "./employees.txt";
 
     try {
-      if (fs.existsSync(fileName)) {
-        //On peut créer une fonction
-        const readedFile = fs.readFileSync(fileName);
-        let fileContent = readedFile.toString().split("\n");
-        console.log("Reading file...");
+       let fileContent = fileReader.readFile(fileName);
+
         let isHeader = true;
         for (let fileInformations of fileContent) {
           try {
             if (isHeader) {
               isHeader = false;
             } else {
-                const informations = fileInformations.split(",");
-                this.sanitizeFileInformations(informations);
-                this.isValidInformations(informations)
-                const extractDateFromInformations = informations[2].split("/");
-                this.isValidDate(extractDateFromInformations);
-                const actualDate = new Date();
-                this.isActualDateIsBirthday(actualDate, extractDateFromInformations);                 
-                this.greetWhenIsBirthDay(informations)      
+                let informations = fileInformations.split(",");
+                if (this.isValidInformations(this.sanitizeFileInformations(informations))) {
+                  const extractDateFromInformations = informations[2].split("/");
+                  if (this.isValidDate(extractDateFromInformations)) {
+                    const actualDate = new Date();
+                    if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
+                      this.greetWhenIsBirthDay(informations)
+                    }                 
+                  }
+                }
             }
           } catch (e) {
             console.log(e);
@@ -32,9 +32,6 @@ class Greeting {
           }
         }
         console.log("Batch job done.");
-      } else {
-        throw new Error("Unable to open file '" + fileName + "'");
-      }
     } catch (error) {
       console.error("Error reading file '" + fileName + "'");
     }
