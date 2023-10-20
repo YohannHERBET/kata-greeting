@@ -2,10 +2,13 @@
 const fileReader = require("./fileGestion/fileReader.js")
 
 class Greeting {
-  constructor(employeesFile) {
+
+  constructor(employeesFile, date) {
     this.employeesFile = employeesFile
+    this.date = date 
   }
-  
+
+
   birthDayGreeting() {
     
     try {
@@ -23,7 +26,7 @@ class Greeting {
                   const extractDateFromInformations = informations[2].split("/");
 
                   if (this.isValidDate(extractDateFromInformations)) {
-                    const actualDate = new Date();
+                    const actualDate = this.date
 
                     if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
                       return this.greetWhenIsBirthDay(informations)
@@ -51,7 +54,7 @@ class Greeting {
   }
 
   sendEmail(to, title, body) {
-    return "Sending email to : " + to + "Title: " + title + "Body: Body" + body
+    return  "Sending email to : " + to + "Title: " + title + "Body: Body" + body
   }
   
   sanitizeFileInformations (informations) {

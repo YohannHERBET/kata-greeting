@@ -1,9 +1,11 @@
 const Greeting = require('../birthdayGreeting.js')
 
 let greeting
+let date
 
 beforeAll(() => {
-  greeting = new Greeting("./tests/testingFile/fakeEmployees.txt");
+  date = new Date("2023-10-20");
+  greeting = new Greeting("./tests/testingFile/fakeEmployees.txt", date);
 })
 
 describe("Test end to end", () => {

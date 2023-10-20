@@ -1,7 +1,8 @@
 const Greeting = require('./birthdayGreeting.js');
 
 function init () {
-  const greeting = new Greeting("./employees.txt");
+  const date = new Date()
+  const greeting = new Greeting("./employees.txt", date);
   greeting.birthDayGreeting();
 }
 
