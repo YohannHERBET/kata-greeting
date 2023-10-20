@@ -16,27 +16,32 @@ class Greeting {
 
         let isHeader = true;
         for (let fileInformations of fileContent) {
+
           try {
             if (isHeader) {
               isHeader = false;
             } else {
-                let informations = fileInformations.split(",");
+              let informations = fileInformations.split(",");
 
-                if (this.isValidInformations(this.sanitizeFileInformations(informations))) {
-                  const extractDateFromInformations = informations[2].split("/");
+              if (this.isValidInformations(this.sanitizeFileInformations(informations))) {
+                const extractDateFromInformations = informations[2].split("/");
 
-                  if (this.isValidDate(extractDateFromInformations)) {
-                    const actualDate = this.date
+                if (this.isValidDate(extractDateFromInformations)) {
+                  const actualDate = this.date
 
+                  try {
                     if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
                       return this.greetWhenIsBirthDay(informations)
-                    }                 
-                  }
+                    }   
+                  } catch (e) {
+                    console.error("Error occurs at greet birthday")
+                  } 
                 }
+              }
             }
           } catch (e) {
             console.log(e);
-            console.error("Error reading file '" + fileName + "'");
+            console.error("Fail at sanitizing informations");
           }
         }
         console.log("Batch job done.");
