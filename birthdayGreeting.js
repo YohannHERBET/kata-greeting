@@ -8,7 +8,6 @@ class Greeting {
     this.date = date 
   }
 
-
   birthDayGreeting() {
     
     try {
