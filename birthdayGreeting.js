@@ -46,18 +46,6 @@ class Greeting {
       console.error("Error reading file '" + fileName + "'");
     }
   } 
-
-  greetWhenIsBirthDay(informations) {
-     return this.sendEmail(
-        informations[3],
-        "Joyeux Anniversaire !",
-        "Bonjour " + informations[0] + ",Joyeux Anniversaire !A bientôt,"
-    );
-  }
-
-  sendEmail(to, title, body) {
-    return  "Sending email to : " + to + "Title: " + title + "Body: Body" + body
-  }
   
   sanitizeFileInformations (informations) {
     for (let informationCount = 0; informationCount < informations.length; informationCount++) {

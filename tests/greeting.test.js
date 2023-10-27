@@ -35,7 +35,7 @@ describe('Functions one by one', () => {
   
 
   it("it should return Sending email to", () => {
-    const sendEmail = greeting.sendEmail("benoit@artisandeveloppeur.fr", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
+    const sendEmail = MockEmailBroker.sendEmail("benoit@artisandeveloppeur.fr", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
     expect(sendEmail).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
   })
 
@@ -60,11 +60,8 @@ describe('Functions one by one', () => {
   })
 
   it("it should valid date greet when it birthday", () => {
-    const greetWhenIsBirthDay = greeting.greetWhenIsBirthDay(informations)
+    const greetWhenIsBirthDay = MockMessage.sendMessage(informations[3], informations[0])
     expect(greetWhenIsBirthDay).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
   })
 })
-
-
-
 
