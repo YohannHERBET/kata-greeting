@@ -28,7 +28,7 @@ class Greeting {
                   const actualDate = this.date
                   try {
                     if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
-                      return this.message.sendMessage(informations[3], informations[0]);
+                      return this.message.sendMessage(informations[3], informations[0], informations[4]);
                     }   
                   } catch (e) {
                     console.error("Error occurs at greet birthday")

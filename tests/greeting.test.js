@@ -10,10 +10,20 @@ class MockEmailBroker {
       return "Sending email to : " + to + "Title: " + title + "Body: Body" + body
   }
 }
+
+class MockSmsBroker {
+  static sendSms(to, title, body) {
+      return "Sending sms to : " + to + "Title: " + title + "Body: Body" + body
+  }
+}
 class MockMessage  {
  
-  static sendMessage(email,firstname) {
-    return MockEmailBroker.sendEmail(email, "Joyeux Anniversaire !","Bonjour " + firstname + ",Joyeux Anniversaire !A bientôt," )
+  static sendMessage(email,firstname, phone) {
+   if(email){
+      return MockEmailBroker.sendEmail(email, "Joyeux Anniversaire !","Bonjour " + firstname + ",Joyeux Anniversaire !A bientôt," )
+   } else {
+      return MockSmsBroker.sendSms(phone, "Joyeux Anniversaire !","Bonjour " + firstname + ",Joyeux Anniversaire !A bientôt," )
+   }
   }
 }
 
@@ -25,7 +35,13 @@ beforeAll(() => {
 
 describe("Test end to end", () => {
 
-  it("say happy birthday Jean, Santana", () => {
+  it("say happy birthday if the employee have a phone", () => {
+    greeting = new Greeting("./tests/testingFile/fakeEmployees.txt", new Date("2023-10-25"), MockMessage)
+    const test = greeting.birthDayGreeting();
+    expect(test).toBe("Sending sms to : 0612345678Title: Joyeux Anniversaire !Body: BodyBonjour John,Joyeux Anniversaire !A bientôt,");
+  })
+  it("say happy birthday if the employee have a phone", () => {
+    greeting = new Greeting("./tests/testingFile/fakeEmployees.txt", new Date("2023-10-20"), MockMessage)
     const test = greeting.birthDayGreeting();
     expect(test).toBe("Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,");
   })
@@ -64,4 +80,12 @@ describe('Functions one by one', () => {
     expect(greetWhenIsBirthDay).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
   })
 })
+
+describe('Sms broker en sms sender', () => {
+   it("it should return Sending sms to", () => {
+    const sendSMS = MockSmsBroker.sendSms("0612345678", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
+    expect(sendSMS).toBe('Sending sms to : 0612345678Title: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
+  })
+})
+
 
