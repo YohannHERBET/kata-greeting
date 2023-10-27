@@ -1,5 +1,5 @@
-first_name, last_name, date_of_birth, email
-Jean, Santana, 20/10/1979, benoit@artisandeveloppeur.fr
-John, Braaaa, 12/11/1900, john.doe@gmail.com
-Bob, Boy, 11/12/1900, john.doe@gmail.com
-Issou, Aya, 04/08/1878, emile.poli@gmail.com
+first_name, last_name, date_of_birth, email, telephone
+Jean, Santana, 20/10/1979, benoit@artisandeveloppeur.fr, 0612345678
+John, Braaaa, 12/11/1900, , 0612345678,
+Bob, Boy, 11/12/1900, benoit@artisandeveloppeur.fr,
+Issou, Aya, 04/08/1878, emile.poli@gmail.com,

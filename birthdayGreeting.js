@@ -3,13 +3,13 @@ const fileReader = require("./fileGestion/fileReader.js")
 
 class Greeting {
 
-  constructor(employeesFile, date) {
+  constructor(employeesFile, date, message) {
     this.employeesFile = employeesFile
-    this.date = date 
+    this.date = date
+    this.message = message
   }
 
   birthDayGreeting() {
-    
     try {
        let fileContent = fileReader.readFile(this.employeesFile);
 
@@ -24,13 +24,11 @@ class Greeting {
 
               if (this.isValidInformations(this.sanitizeFileInformations(informations))) {
                 const extractDateFromInformations = informations[2].split("/");
-
                 if (this.isValidDate(extractDateFromInformations)) {
                   const actualDate = this.date
-
                   try {
                     if (this.isActualDateIsBirthday(actualDate, extractDateFromInformations)) {
-                      return this.greetWhenIsBirthDay(informations)
+                      return this.message.sendMessage(informations[3], informations[0]);
                     }   
                   } catch (e) {
                     console.error("Error occurs at greet birthday")
@@ -69,7 +67,7 @@ class Greeting {
   }
 
   isValidInformations(informations) {
-    return informations.length == 4;
+    return informations.length == 5;
   }
 
    isValidDate(extractDateFromInformations) {
