@@ -18,11 +18,13 @@ class MockSmsBroker {
 }
 class MockMessage  {
  
-  static sendMessage(email,firstname, phone) {
+  static sendMessage(email, firstname, phone) {
    if(email){
       return MockEmailBroker.sendEmail(email, "Joyeux Anniversaire !","Bonjour " + firstname + ",Joyeux Anniversaire !A bientôt," )
-   } else {
+   } else if(phone) {
       return MockSmsBroker.sendSms(phone, "Joyeux Anniversaire !","Bonjour " + firstname + ",Joyeux Anniversaire !A bientôt," )
+   } else {
+    throw new Error("Error, doesn't have mail or phone");
    }
   }
 }
@@ -35,12 +37,12 @@ beforeAll(() => {
 
 describe("Test end to end", () => {
 
-  it("say happy birthday if the employee have a phone", () => {
+  it("say happy birthday if the employee have only a phone number register", () => {
     greeting = new Greeting("./tests/testingFile/fakeEmployees.txt", new Date("2023-10-25"), MockMessage)
     const test = greeting.birthDayGreeting();
     expect(test).toBe("Sending sms to : 0612345678Title: Joyeux Anniversaire !Body: BodyBonjour John,Joyeux Anniversaire !A bientôt,");
   })
-  it("say happy birthday if the employee have a phone", () => {
+  it("say happy birthday if the employee have a email", () => {
     greeting = new Greeting("./tests/testingFile/fakeEmployees.txt", new Date("2023-10-20"), MockMessage)
     const test = greeting.birthDayGreeting();
     expect(test).toBe("Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,");
@@ -49,12 +51,6 @@ describe("Test end to end", () => {
 
 describe('Functions one by one', () => {
   
-
-  it("it should return Sending email to", () => {
-    const sendEmail = MockEmailBroker.sendEmail("benoit@artisandeveloppeur.fr", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
-    expect(sendEmail).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
-  })
-
   it("it should sanitize file informations", () => {
     const sanitizeFileInformations = greeting.sanitizeFileInformations(informations);
     expect(sanitizeFileInformations).toStrictEqual(['Jean', 'Santana', '20/10/1979', 'benoit@artisandeveloppeur.fr', ''])
@@ -74,18 +70,33 @@ describe('Functions one by one', () => {
     const isValidDate = greeting.isValidDate(birthdayDate);
     expect(isValidDate).toBe(true)
   })
-
-  it("it should valid date greet when it birthday", () => {
-    const greetWhenIsBirthDay = MockMessage.sendMessage(informations[3], informations[0])
-    expect(greetWhenIsBirthDay).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
-  })
 })
 
-describe('Sms broker en sms sender', () => {
-   it("it should return Sending sms to", () => {
+describe('sms sending logic', () => {
+  
+  it("it should return Sending sms to", () => {
     const sendSMS = MockSmsBroker.sendSms("0612345678", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
     expect(sendSMS).toBe('Sending sms to : 0612345678Title: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
   })
+
+  it("it should valid date greet when it birthday for email", () => {
+    const greetWhenIsBirthDay = MockMessage.sendMessage(informations[3], informations[0])
+    expect(greetWhenIsBirthDay).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
+  })
+
+  it("it should valid date greet when it birthday for sms", () => {
+    const greetWhenIsBirthDay = MockMessage.sendMessage(null, informations[0], '0612345678')
+    expect(greetWhenIsBirthDay).toBe('Sending sms to : 0612345678Title: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
+  })
+
+  it("it should return Sending email to", () => {
+    const sendEmail = MockEmailBroker.sendEmail("benoit@artisandeveloppeur.fr", "Joyeux Anniversaire !", "Bonjour " + "Jean" + ",Joyeux Anniversaire !A bientôt,");
+    expect(sendEmail).toBe('Sending email to : benoit@artisandeveloppeur.frTitle: Joyeux Anniversaire !Body: BodyBonjour Jean,Joyeux Anniversaire !A bientôt,')
+  })
+
+  it("it should return a error message", () => {
+    expect(() => {
+      MockMessage.sendMessage(null, informations[0])
+    }).toThrow("Error, doesn't have mail or phone");
+  })
 })
-
-
